@@ -7,6 +7,7 @@ import android.content.res.AssetManager
 import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
+import com.example.forstapp.POJO.ASPDocumentMap.Companion.printMap
 import com.example.forstapp.R
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import com.tom_roush.pdfbox.pdmodel.PDDocument
@@ -49,16 +50,18 @@ class ASPDocumentBuilder(){
             //f values: Horizontal offset, positive moves text left, negative moves text right
             //e values: vertical offset, positive moves text upwards, negative moves text down
 
-            var doc = PDDocument.load(copiedFile)
+            val doc = PDDocument.load(copiedFile)
             val page = doc.getPage(0)
-            //page.rotation = 0
             val contentStream = PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true)
             contentStream.beginText()
-            //contentStream.newLineAtOffset(25F, 25F);
-            contentStream.setFont(PDType1Font.HELVETICA, 12F)
-            contentStream.setTextMatrix(Matrix(0F, -1F, 1F, 0F, 200F, 355.5F))
-            var text = "x"
-            contentStream.showText(text)
+
+
+            printMap[83]?.let { it(contentStream, "x") }
+            printMap[74]?.let { it(contentStream, "x") }
+            printMap[75]?.let { it(contentStream, "x") }
+            printMap[86]?.let { it(contentStream, "x") }
+            printMap[77]?.let { it(contentStream, "x") }
+
             contentStream.endText()
             contentStream.close()
             doc.save(File(appContext.filesDir, destinationFileName))
