@@ -12,10 +12,6 @@ import com.example.forstapp.R
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.pdmodel.PDPageContentStream
-import com.tom_roush.pdfbox.pdmodel.font.PDType0Font
-import com.tom_roush.pdfbox.pdmodel.font.PDType1CFont
-import com.tom_roush.pdfbox.pdmodel.font.PDType1Font
-import com.tom_roush.pdfbox.util.Matrix
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -37,7 +33,7 @@ class ASPDocumentBuilder(){
         }
 
         fun createPdf(){
-            val sourceRawResourceId = R.raw.asp_pdf
+            val sourceRawResourceId = R.raw.asp_pdf_blackwhite
             val destinationFileName = "destination.pdf" // Replace with the desired file name for the copied file in internal storage
             val copiedFile = copyFile(sourceRawResourceId, destinationFileName)
 
@@ -55,11 +51,56 @@ class ASPDocumentBuilder(){
             val contentStream = PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true)
             contentStream.beginText()
 
+            printMap[1]?.let { it(contentStream, "7") }
+            printMap[2]?.let { it(contentStream, "8") }
+            printMap[3]?.let { it(contentStream, "2") }
+            printMap[4]?.let { it(contentStream, "4") }
+            printMap[5]?.let { it(contentStream, "8") }
+            printMap[6]?.let { it(contentStream, "5") }
+            printMap[7]?.let { it(contentStream, "John") }
+            printMap[8]?.let { it(contentStream, "Doe") }
+            printMap[9]?.let { it(contentStream, "2") }
+            printMap[10]?.let { it(contentStream, "4") }
+            printMap[11]?.let { it(contentStream, "8") }
+            printMap[12]?.let { it(contentStream, "5") }
+            printMap[13]?.let { it(contentStream, "9") }
+            printMap[14]?.let { it(contentStream, "Berlin") }
+            printMap[15]?.let { it(contentStream, "Die Straße 23") }
+            printMap[16]?.let { it(contentStream, "+123456789 675") }
+            printMap[17]?.let { it(contentStream, "2123456") }
+            printMap[18]?.let { it(contentStream, "2") }
+            printMap[19]?.let { it(contentStream, "4") }
+            printMap[20]?.let { it(contentStream, "8") }
+            printMap[21]?.let { it(contentStream, "5") }
+            printMap[22]?.let { it(contentStream, "9") }
+            printMap[23]?.let { it(contentStream, "hier") }
+            printMap[24]?.let { it(contentStream, "dort") }
+            printMap[25]?.let { it(contentStream, "x") }
+            printMap[27]?.let { it(contentStream, "x") }
+            printMap[29]?.let { it(contentStream, "x") }
+            printMap[31]?.let { it(contentStream, "x") }
+            printMap[26]?.let { it(contentStream, "x") }
+            printMap[28]?.let { it(contentStream, "x") }
+            printMap[30]?.let { it(contentStream, "x") }
+            printMap[32]?.let { it(contentStream, "x") }
+            printMap[33]?.let { it(contentStream, "9") }
+            printMap[34]?.let { it(contentStream, "8") }
+            printMap[35]?.let { it(contentStream, "7") }
+            printMap[36]?.let { it(contentStream, "6") }
+            printMap[37]?.let { it(contentStream, "5") }
+            printMap[39]?.let { it(contentStream, "4") }
+            printMap[40]?.let { it(contentStream, "3") }
+            printMap[41]?.let { it(contentStream, "2") }
+            printMap[42]?.let { it(contentStream, "8") }
+            printMap[43]?.let { it(contentStream, "0") }
+            printMap[44]?.let { it(contentStream, "1") }
+            printMap[45]?.let { it(contentStream, "4") }
+            printMap[46]?.let { it(contentStream, "1") }
+            printMap[47]?.let { it(contentStream, "4") }
             printMap[48]?.let { it(contentStream, "x") }
             printMap[49]?.let { it(contentStream, "x") }
             printMap[50]?.let { it(contentStream, "x") }
             printMap[51]?.let { it(contentStream, "x") }
-
             printMap[52]?.let { it(contentStream, "2") }
             printMap[53]?.let { it(contentStream, "8") }
             printMap[54]?.let { it(contentStream, "0") }
@@ -95,6 +136,7 @@ class ASPDocumentBuilder(){
             printMap[84]?.let { it(contentStream, "x") }
             printMap[85]?.let { it(contentStream, "x") }
             printMap[86]?.let { it(contentStream, "x") }
+            printMap[87]?.let { it(contentStream, "x") }
             printMap[88]?.let { it(contentStream, "keine weiteren Hinweise") }
 
             contentStream.endText()
