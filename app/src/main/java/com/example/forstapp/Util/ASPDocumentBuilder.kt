@@ -55,12 +55,47 @@ class ASPDocumentBuilder(){
             val contentStream = PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true)
             contentStream.beginText()
 
+            printMap[48]?.let { it(contentStream, "x") }
+            printMap[49]?.let { it(contentStream, "x") }
+            printMap[50]?.let { it(contentStream, "x") }
+            printMap[51]?.let { it(contentStream, "x") }
 
-            printMap[83]?.let { it(contentStream, "x") }
+            printMap[52]?.let { it(contentStream, "2") }
+            printMap[53]?.let { it(contentStream, "8") }
+            printMap[54]?.let { it(contentStream, "0") }
+            printMap[55]?.let { it(contentStream, "1") }
+            printMap[56]?.let { it(contentStream, "4") }
+            printMap[57]?.let { it(contentStream, "1") }
+            printMap[58]?.let { it(contentStream, "4") }
+
+            printMap[60]?.let { it(contentStream, "2") }
+            printMap[61]?.let { it(contentStream, "8") }
+            printMap[62]?.let { it(contentStream, "0") }
+            printMap[63]?.let { it(contentStream, "1") }
+            printMap[64]?.let { it(contentStream, "4") }
+            printMap[65]?.let { it(contentStream, "9") }
+            printMap[66]?.let { it(contentStream, "x") }
+            printMap[67]?.let { it(contentStream, "x") }
+            printMap[68]?.let { it(contentStream, "x") }
+            printMap[69]?.let { it(contentStream, "x") }
+            printMap[70]?.let { it(contentStream, "x") }
+            printMap[71]?.let { it(contentStream, "x") }
+            printMap[72]?.let { it(contentStream, "x") }
+            printMap[73]?.let { it(contentStream, "x") }
             printMap[74]?.let { it(contentStream, "x") }
             printMap[75]?.let { it(contentStream, "x") }
-            printMap[86]?.let { it(contentStream, "x") }
+            printMap[76]?.let { it(contentStream, "x") }
             printMap[77]?.let { it(contentStream, "x") }
+            printMap[78]?.let { it(contentStream, "x") }
+            printMap[79]?.let { it(contentStream, "x") }
+            printMap[80]?.let { it(contentStream, "x") }
+            printMap[81]?.let { it(contentStream, "x") }
+            printMap[82]?.let { it(contentStream, "x") }
+            printMap[83]?.let { it(contentStream, "x") }
+            printMap[84]?.let { it(contentStream, "x") }
+            printMap[85]?.let { it(contentStream, "x") }
+            printMap[86]?.let { it(contentStream, "x") }
+            printMap[88]?.let { it(contentStream, "keine weiteren Hinweise") }
 
             contentStream.endText()
             contentStream.close()
