@@ -75,6 +75,8 @@ dependencies {
     implementation("androidx.compose.material3:material3-adaptive:1.0.0-alpha06")
     implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.0.0-alpha03")
     implementation("com.google.android.gms:play-services-location:21.1.0")
+    implementation("com.google.zxing:core:3.3.3")
+
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

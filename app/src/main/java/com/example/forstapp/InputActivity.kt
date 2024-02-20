@@ -1,6 +1,7 @@
 package com.example.forstapp
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
@@ -8,6 +9,7 @@ import android.location.Location
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,11 +40,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.forstapp.Util.ASPDocumentBuilder
+import com.example.forstapp.Util.BarcodeGenerator
 import com.example.forstapp.Util.BarcodeScanner
 import com.example.forstapp.Util.Tools.Companion.convertLongToTime
 import com.example.forstapp.ui.theme.ForstAppTheme
@@ -75,7 +80,6 @@ class InputActivity : ComponentActivity(){
                 var expanded4 by remember { mutableStateOf(false) }
                 var expanded5 by remember { mutableStateOf(false) }
                 var expanded6 by remember { mutableStateOf(false) }
-
 
                 val customerNumber = remember { mutableStateOf("") }
                 val name = remember { mutableStateOf("") }
@@ -311,6 +315,8 @@ class InputActivity : ComponentActivity(){
                                     onClick = { helper("2 - Adult") })
                             }
                         }
+                        var generator = BarcodeGenerator()
+                        Image(painter = BitmapPainter(generator.CreateImage("ABC-123-Xcd", "Barcode").asImageBitmap()), contentDescription = "Barcode")
                     }
                 }
             }
@@ -393,6 +399,7 @@ fun BarcodeValueDisplay(
     Text(text = barcodeValue ?: "")
 }
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerView() {
