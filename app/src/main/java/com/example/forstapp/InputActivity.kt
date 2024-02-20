@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenu
@@ -66,6 +67,7 @@ class InputActivity : ComponentActivity(){
             barcodeScanner = BarcodeScanner(context)
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             ForstAppTheme {
+                val loadingLocation = remember { mutableStateOf(false) }
 
                 var expanded1 by remember { mutableStateOf(false) }
                 var expanded2 by remember { mutableStateOf(false) }
@@ -83,6 +85,7 @@ class InputActivity : ComponentActivity(){
                 val phone = remember { mutableStateOf("") }
                 val region = remember { mutableStateOf("Kreiszugehörigkeit") }
                 val localZipCode = remember { mutableStateOf("") }
+                val localCity = remember { mutableStateOf("") }
                 val latitude = remember { mutableStateOf("") }
                 val longitude = remember { mutableStateOf("") }
                 val wildlifeOrigin = remember { mutableStateOf("") }
@@ -109,88 +112,106 @@ class InputActivity : ComponentActivity(){
                         }) {
                             Text(text = "PDF")
                         }
-                        Text(text = "Angaben zum Probennehmer")
-                        TextField(
-                            value = customerNumber.value,
-                            onValueChange = { customerNumber.value = it },
-                            label = { Text("Kundennummer im LALLF") },
-                            singleLine = true
-                        )
-                        TextField(
-                            value = name.value,
-                            onValueChange = { name.value = it },
-                            label = { Text("Name") },
-                            singleLine = true
-                        )
-                        TextField(
-                            value = zipCode.value,
-                            onValueChange = { zipCode.value = it },
-                            label = { Text("PLZ") },
-                            singleLine = true
-                        )
-                        TextField(
-                            value = city.value,
-                            onValueChange = { city.value = it },
-                            label = { Text("Ort") },
-                            singleLine = true
-                        )
-                        TextField(
-                            value = streetNumber.value,
-                            onValueChange = { streetNumber.value = it },
-                            label = { Text("Straße/Hausnummer") },
-                            singleLine = true
-                        )
-                        TextField(
-                            value = phone.value,
-                            onValueChange = { phone.value = it },
-                            label = { Text("Telefon") },
-                            singleLine = true
-                        )
-                        Text(text = "Angaben zum Fundort")
-                        OutlinedButton(onClick = { expanded1 = !expanded1 }) { //TODO vllt = true
-                            Text(text = region.value)
-                            DropdownMenu(
-                                expanded = expanded1,
-                                onDismissRequest = { expanded1 = false }) {
-                                fun helper(name: String) {
-                                    region.value = name
-                                    expanded1 = false
-                                }
+                        ElevatedCard {
+                            Text(text = "Angaben zum Probennehmer")
+                            TextField(
+                                value = customerNumber.value,
+                                onValueChange = { customerNumber.value = it },
+                                label = { Text("Kundennummer im LALLF") },
+                                singleLine = true
+                            )
+                            TextField(
+                                value = name.value,
+                                onValueChange = { name.value = it },
+                                label = { Text("Name") },
+                                singleLine = true
+                            )
+                            TextField(
+                                value = zipCode.value,
+                                onValueChange = { zipCode.value = it },
+                                label = { Text("PLZ") },
+                                singleLine = true
+                            )
+                            TextField(
+                                value = city.value,
+                                onValueChange = { city.value = it },
+                                label = { Text("Ort") },
+                                singleLine = true
+                            )
+                            TextField(
+                                value = streetNumber.value,
+                                onValueChange = { streetNumber.value = it },
+                                label = { Text("Straße/Hausnummer") },
+                                singleLine = true
+                            )
+                            TextField(
+                                value = phone.value,
+                                onValueChange = { phone.value = it },
+                                label = { Text("Telefon") },
+                                singleLine = true
+                            )
+                        }
+                        ElevatedCard {
+                            Text(text = "Angaben zum Fundort")
+                            TextField(
+                                value = localZipCode.value,
+                                onValueChange = { localZipCode.value = it },
+                                label = { Text("PLZ") },
+                                singleLine = true
+                            )
+                            TextField(
+                                value = localCity.value,
+                                onValueChange = { localCity.value = it },
+                                label = { Text("Ort") },
+                                singleLine = true
+                            )
+                            OutlinedButton(onClick = {
+                                expanded1 = !expanded1
+                            }) { //TODO vllt = true
+                                Text(text = region.value)
+                                DropdownMenu(
+                                    expanded = expanded1,
+                                    onDismissRequest = { expanded1 = false }) {
+                                    fun helper(name: String) {
+                                        region.value = name
+                                        expanded1 = false
+                                    }
 
-                                DropdownMenuItem(
-                                    text = { Text("LRO") },
-                                    onClick = { helper("LRO") })
-                                DropdownMenuItem(
-                                    text = { Text("LUP") },
-                                    onClick = { helper("LUP") })
-                                DropdownMenuItem(
-                                    text = { Text("MSE") },
-                                    onClick = { helper("MSE") })
-                                DropdownMenuItem(
-                                    text = { Text("NWM") },
-                                    onClick = { helper("NWM") })
-                                DropdownMenuItem(text = { Text("VR") }, onClick = { helper("VR") })
-                                DropdownMenuItem(text = { Text("VG") }, onClick = { helper("VG") })
-                                DropdownMenuItem(
-                                    text = { Text("HRO") },
-                                    onClick = { helper("HRO") })
-                                DropdownMenuItem(text = { Text("SN") }, onClick = { helper("SN") })
+                                    DropdownMenuItem(
+                                        text = { Text("LRO") },
+                                        onClick = { helper("LRO") })
+                                    DropdownMenuItem(
+                                        text = { Text("LUP") },
+                                        onClick = { helper("LUP") })
+                                    DropdownMenuItem(
+                                        text = { Text("MSE") },
+                                        onClick = { helper("MSE") })
+                                    DropdownMenuItem(
+                                        text = { Text("NWM") },
+                                        onClick = { helper("NWM") })
+                                    DropdownMenuItem(
+                                        text = { Text("VR") },
+                                        onClick = { helper("VR") })
+                                    DropdownMenuItem(
+                                        text = { Text("VG") },
+                                        onClick = { helper("VG") })
+                                    DropdownMenuItem(
+                                        text = { Text("HRO") },
+                                        onClick = { helper("HRO") })
+                                    DropdownMenuItem(
+                                        text = { Text("SN") },
+                                        onClick = { helper("SN") })
+                                }
                             }
                         }
-                        TextField(
-                            value = localZipCode.value,
-                            onValueChange = { localZipCode.value = it },
-                            label = { Text("PLZ") },
-                            singleLine = true
-                        )
-
                         val active = remember { mutableStateOf(true) }
                         OutlinedButton(
-                            onClick = { getLocation(context, latitude, active, longitude) },
+                            onClick = { getLocation(context, latitude, active, longitude, loadingLocation) },
                             enabled = active.value
                         ) {
                             Text(text = "Aktuellen Standort verwenden")
                         }
+                        if (loadingLocation.value) CircularProgressIndicator()
                         if (latitude.value != "" || longitude.value != "") {
                             Text(text = latitude.value)
                             Text(text = longitude.value)
@@ -300,7 +321,8 @@ class InputActivity : ComponentActivity(){
         context: Context,
         latitude: MutableState<String>,
         active: MutableState<Boolean>,
-        longitude: MutableState<String>
+        longitude: MutableState<String>,
+        loading: MutableState<Boolean>
     ) {
         if (ActivityCompat.checkSelfPermission(
                 context,
@@ -322,15 +344,19 @@ class InputActivity : ComponentActivity(){
                 .setGranularity(Granularity.GRANULARITY_FINE)
                 .build()
             active.value = false
-            latitude.value = "aktuellen Standort abrufen"
+            loading.value = true
+            latitude.value = ""
             longitude.value = ""
             fusedLocationClient.getCurrentLocation(tmp, null)
                 .addOnSuccessListener { location: Location? ->
-
                     if (location != null) {
+                        loading.value = false
                         latitude.value = location.latitude.toString()
                         longitude.value = location.longitude.toString()
                     }
+                }.addOnFailureListener {
+                    loading.value = false
+                    latitude.value = "GPS nicht verfügbar"
                 }
             active.value = true
         }
