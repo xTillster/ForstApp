@@ -1,5 +1,15 @@
 package com.example.forstapp.POJO
 
-data class ASPProfile (val customerNumber: Int, val name: String, val zipCode: Int, val city: String, val streetNumber: String, val phone: String) {
-
+data class ASPProfile(
+    var customerNumber: String,
+    var name: String,
+    var surname: String,
+    var zipCode: String,
+    var city: String,
+    var streetNumber: String,
+    var phone: String
+) {
+    companion object {
+        var activeProfile: ASPProfile? = null
+    }
 }

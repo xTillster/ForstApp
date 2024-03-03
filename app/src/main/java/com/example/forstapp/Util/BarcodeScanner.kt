@@ -29,7 +29,7 @@ class BarcodeScanner(
                 .addOnCanceledListener {
                     barCodeResults.value = "failed"
                 }
-                .addOnFailureListener{e ->
+                .addOnFailureListener{
                     barCodeResults.value = "failed"
                 }
         } catch(e: Exception){
