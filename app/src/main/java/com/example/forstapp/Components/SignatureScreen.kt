@@ -51,7 +51,7 @@ fun SignatureScreen(navController: NavController) {
         Canvas(modifier = Modifier
             .width(500.dp)
             .height(300.dp)
-            .border(1.dp, Color.Black)
+            .border(1.dp, Color.Red)
             .clipToBounds()
             .pointerInput(true) {
                 detectDragGestures { change, dragAmount ->
@@ -115,7 +115,7 @@ private fun saveCanvasToBitmap(lines: List<Line>, points: List<Offset>, width: F
 
 private fun drawCanvasContent(canvas: Canvas, lines: List<Line>, points: List<Offset>) {
     val paint = Paint().apply {
-        color = Color.Black.toArgb()
+        color = Color.Red.toArgb()
         strokeWidth = 4f
     }
     lines.forEach { line ->
@@ -137,6 +137,6 @@ private fun drawCanvasContent(canvas: Canvas, lines: List<Line>, points: List<Of
 data class Line(
     val start: Offset,
     val end: Offset,
-    val color: Color = Color.Black,
+    val color: Color = Color.Red,
     val strokeWidth: Dp = 1.dp
 )

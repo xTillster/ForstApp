@@ -3,11 +3,24 @@ package com.example.forstapp.POJO
 /** POJO of "Afrikanische Schweinepest" document **/
 
 data class ASP(
-    var profile: ASPProfile, var region: String, var localZipCode: String,
-    var localCity: String, var latitude: String, var longitude: String,
-    var wildlifeOrigin: String, var locationRegion: String, var sex: String,
-    var trap: String, var age: String, var material: String,
-    var decomposition: String, var causeOfDeath: String
+    var profile: ASPProfile,
+    var region: String,
+    var localZipCode: String,
+    var localCity: String,
+    var hegering: String,
+    var latitude: String,
+    var longitude: String,
+    var wildlifeOrigin: String,
+    var locationRegion: String,
+    var date: String,
+    var sex: String,
+    var trap: String,
+    var age: String,
+    var material: String,
+    var decomposition: String,
+    var causeOfDeath: String,
+    var barcode: String,
+    var additionalInfo: String
 ) {
     companion object {
         val ASPs = ArrayList<ASP>()
@@ -23,13 +36,13 @@ data class ASP(
             }
             currentASP = ASP(
                 tmpASPProfile, "Kreiszugehörigkeit", "", "", "", "",
-                "", "Fundort ist ...", "Geschlecht", "Fallenfang",
+                "", "", "Fundort ist ...", "", "Geschlecht", "Fallenfang",
                 "Alter", "Untersuchungsmaterial", "Verwesungsgrad des Tierkörpers",
-                "Abgangsursache"
+                "Abgangsursache", "", ""
             )
         }
 
-        fun saveCurrentASP(){
+        fun saveCurrentASP() {
             ASPs.add(currentASP)
         }
     }

@@ -10,8 +10,10 @@ class BarcodeGenerator {
 
     companion object {
         private val size = 660
-        private val size_width = 660
-        private val size_height = 264
+        //private val size_width = 660
+        //private val size_height = 264
+        private val size_width = 150
+        private val size_height = 60
         var bitmap: Bitmap? = null
 
         @Throws(WriterException::class)

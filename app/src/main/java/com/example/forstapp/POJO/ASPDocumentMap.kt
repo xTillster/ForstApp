@@ -4,6 +4,7 @@ import com.tom_roush.pdfbox.pdmodel.PDPageContentStream
 import com.tom_roush.pdfbox.pdmodel.font.PDType1Font
 import com.tom_roush.pdfbox.pdmodel.graphics.image.PDImageXObject
 import com.tom_roush.pdfbox.util.Matrix
+import java.io.ByteArrayInputStream
 
 class ASPDocumentMap {
     companion object {
@@ -15,6 +16,7 @@ class ASPDocumentMap {
                 //initialisiert die Map zum document schreiben mit allen Funktionen und den Koordinaten
                 printMap[i] = inputBuilder(coordinates[i])
             }
+
         }
 
         //Input: Position wo Text geschrieben werden soll als Matrix

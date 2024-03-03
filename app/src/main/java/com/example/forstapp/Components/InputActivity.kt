@@ -4,12 +4,16 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -53,6 +57,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.forstapp.Navigation
@@ -69,6 +74,7 @@ import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import kotlinx.coroutines.launch
+import java.io.File
 
 private lateinit var barcodeScanner: BarcodeScanner
 private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -543,6 +549,13 @@ private lateinit var fusedLocationClient: FusedLocationProviderClient
 fun InputScreen(navController: NavController){
     val activity = (LocalContext.current as Activity)
     activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    val context = LocalContext.current
+
+    /*val openDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        uri?.let {
+            openPDF(context, it)
+        }
+    }*/
 
     val loadingLocation = remember { mutableStateOf(false) }
 
@@ -557,6 +570,7 @@ fun InputScreen(navController: NavController){
 
     val customerNumber = remember { mutableStateOf(ASP.currentASP.profile.customerNumber) }
     val name = remember { mutableStateOf(ASP.currentASP.profile.name) }
+    val surname = remember { mutableStateOf(ASP.currentASP.profile.surname) }
     val zipCode = remember { mutableStateOf(ASP.currentASP.profile.zipCode) }
     val city = remember { mutableStateOf(ASP.currentASP.profile.city) }
     val streetNumber = remember { mutableStateOf(ASP.currentASP.profile.streetNumber) }
@@ -564,6 +578,7 @@ fun InputScreen(navController: NavController){
     val region = remember { mutableStateOf(ASP.currentASP.region) }
     val localZipCode = remember { mutableStateOf(ASP.currentASP.localZipCode) }
     val localCity = remember { mutableStateOf(ASP.currentASP.localCity) }
+    val hegering = remember { mutableStateOf(ASP.currentASP.hegering) }
     val latitude = remember { mutableStateOf(ASP.currentASP.latitude) }
     val longitude = remember { mutableStateOf(ASP.currentASP.longitude) }
     val wildlifeOrigin = remember { mutableStateOf(ASP.currentASP.wildlifeOrigin) }
@@ -574,14 +589,17 @@ fun InputScreen(navController: NavController){
     val material = remember { mutableStateOf(ASP.currentASP.material) }
     val decomposition = remember { mutableStateOf(ASP.currentASP.decomposition) }
     val causeOfDeath = remember { mutableStateOf(ASP.currentASP.causeOfDeath) }
+    val additionalInfo = remember { mutableStateOf(ASP.currentASP.additionalInfo) }
 
-    val context = LocalContext.current
+
     barcodeScanner = BarcodeScanner(context)
     fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+
+    val barcodeResults = barcodeScanner.barCodeResults.collectAsStateWithLifecycle()
+
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
-        val barcodeResults = barcodeScanner.barCodeResults.collectAsStateWithLifecycle()
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
@@ -590,12 +608,12 @@ fun InputScreen(navController: NavController){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ScanBarcode(barcodeScanner::startScan, barcodeResults.value)
-            Button(onClick = {
+            /*Button(onClick = {
                 ASPDocumentBuilder.setup(context)
                 ASPDocumentBuilder.createPdf()
             }) {
                 Text(text = "PDF")
-            }
+            }*/
             ElevatedCard(
                 modifier = Modifier.fillMaxSize()
             ) {
@@ -612,6 +630,15 @@ fun InputScreen(navController: NavController){
                 OutlinedTextField(
                     value = name.value,
                     onValueChange = { name.value = it },
+                    label = { Text("Vorname") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    )
+                )
+                OutlinedTextField(
+                    value = surname.value,
+                    onValueChange = { surname.value = it },
                     label = { Text("Name") },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
@@ -681,6 +708,12 @@ fun InputScreen(navController: NavController){
                     value = localCity.value,
                     onValueChange = { localCity.value = it },
                     label = { Text("Ort") },
+                    singleLine = true
+                )
+                OutlinedTextField(
+                    value = hegering.value,
+                    onValueChange = { hegering.value = it },
+                    label = { Text("Gemarkung/ Hegering") },
                     singleLine = true
                 )
                 OutlinedButton(onClick = {
@@ -774,17 +807,17 @@ fun InputScreen(navController: NavController){
                         text = { Text("nicht bekannt") },
                         onClick = { helper("nicht bekannt") })
                     DropdownMenuItem(
-                        text = { Text("Kerngebiet") },
-                        onClick = { helper("Kerngebiet") })
-                    DropdownMenuItem(
                         text = { Text("kein Risikogebiet") },
                         onClick = { helper("kein Risikogebiet") })
+                    DropdownMenuItem(
+                        text = { Text("Kerngebiet") },
+                        onClick = { helper("Kerngebiet") })
                     DropdownMenuItem(
                         text = { Text("Sperrzone I Pufferzone") },
                         onClick = { helper("Sperrzone I Pufferzone") })
                     DropdownMenuItem(
-                        text = { Text("Sperrzone II (gefährdetes Gebiet)") },
-                        onClick = { helper("Sperrzone II (gefährdetes Gebiet)") })
+                        text = { Text("Sperrzone II (gefährdetes G.)") },
+                        onClick = { helper("Sperrzone II (gefährdetes G.)") })
                 }
             }
             ElevatedCard {
@@ -855,14 +888,18 @@ fun InputScreen(navController: NavController){
                         onClick = { helper("2 - Adult") })
                 }
             }
-            Image(
-                painter = BitmapPainter(
-                    BarcodeGenerator.createImage(
-                        "ABC-123-Xcd",
-                        "Barcode"
-                    ).asImageBitmap()
-                ), contentDescription = "Barcode"
-            )
+
+            barcodeResults.value?.let {
+                Image(
+                    painter = BitmapPainter(
+                        BarcodeGenerator.createImage(
+                            barcodeResults.value,
+                            "Barcode"
+                        ).asImageBitmap()
+                    ), contentDescription = "Barcode"
+                )
+            }
+
             OutlinedButton(onClick = { expanded6 = !expanded6 }) { //TODO vllt = true
                 Text(text = material.value)
                 DropdownMenu(
@@ -941,11 +978,13 @@ fun InputScreen(navController: NavController){
             fun saveState() {
                 ASP.currentASP.profile.customerNumber = customerNumber.value
                 ASP.currentASP.profile.name = name.value
+                ASP.currentASP.profile.surname = surname.value
                 ASP.currentASP.profile.zipCode = zipCode.value
                 ASP.currentASP.profile.city = city.value
                 ASP.currentASP.profile.streetNumber = streetNumber.value
                 ASP.currentASP.profile.phone = phone.value
                 ASP.currentASP.region = region.value
+                ASP.currentASP.hegering = hegering.value
                 ASP.currentASP.localZipCode = localZipCode.value
                 ASP.currentASP.localCity = localCity.value
                 ASP.currentASP.latitude = latitude.value
@@ -958,6 +997,8 @@ fun InputScreen(navController: NavController){
                 ASP.currentASP.material = material.value
                 ASP.currentASP.decomposition = decomposition.value
                 ASP.currentASP.causeOfDeath = causeOfDeath.value
+                ASP.currentASP.barcode = barcodeResults.value.toString()
+                ASP.currentASP.additionalInfo = additionalInfo.value
             }
             OutlinedButton(onClick = {
                 saveState()
@@ -965,6 +1006,15 @@ fun InputScreen(navController: NavController){
             }) {
                 Text(text = "Unterschreiben")
             }
+            OutlinedTextField(
+                value = additionalInfo.value,
+                onValueChange = { additionalInfo.value = it },
+                label = { Text("weitere Hinweise") },
+                singleLine = false,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next
+                )
+            )
             Signature.signatureBitmap?.let {
                 Image(
                     painter = BitmapPainter(
@@ -972,6 +1022,16 @@ fun InputScreen(navController: NavController){
                     ),
                     contentDescription = "Signature"
                 )
+            }
+            Button(onClick = {
+                saveState()
+                ASPDocumentBuilder.setup(context, ASP.currentASP)
+                ASPDocumentBuilder.createPdf()
+            }) {
+                Text(text = "Create PDF")
+            }
+            Button(onClick = { openPDF(context) }) {
+                Text("Open PDF")
             }
         }
     }
@@ -1095,3 +1155,19 @@ private fun getLocation(
     }
 }
 
+/*fun openPDF(context: Context, uri: Uri) {
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.setDataAndType(uri, "application/pdf")
+    intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+    context.startActivity(intent)
+}*/
+
+fun openPDF(context: Context) {
+    val file = File(context.filesDir, "destination.pdf")
+    val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.setDataAndType(uri, "application/pdf")
+    intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    context.startActivity(intent)
+}

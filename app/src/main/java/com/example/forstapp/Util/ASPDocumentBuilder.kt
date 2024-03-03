@@ -4,18 +4,26 @@ import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.AssetManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
+import com.example.forstapp.POJO.ASP
 import com.example.forstapp.POJO.ASPDocumentMap.Companion.printMap
 import com.example.forstapp.R
+import com.tom_roush.harmony.awt.geom.AffineTransform
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.pdmodel.PDPageContentStream
+import com.tom_roush.pdfbox.pdmodel.graphics.image.PDImageXObject
+//import com.tom_roush.pdfbox.util.Matrix
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import android.graphics.Matrix
 
 
 class ASPDocumentBuilder(){
@@ -23,21 +31,22 @@ class ASPDocumentBuilder(){
         private lateinit var root : File
         private lateinit var assetManager : AssetManager
         private lateinit var appContext: Context
+        private lateinit var asp: ASP
 
         /** Requieres Application context, Activity.getApplicationContext() **/
-        fun setup(appContext: Context){
+        fun setup(appContext: Context, asp: ASP){
             this.appContext = appContext
             PDFBoxResourceLoader.init(appContext)
             root = appContext.cacheDir
             assetManager = appContext.assets
+            this.asp = asp
         }
 
         fun createPdf(){
+
             val sourceRawResourceId = R.raw.asp_pdf_blackwhite
             val destinationFileName = "destination.pdf" // Replace with the desired file name for the copied file in internal storage
             val copiedFile = copyFile(sourceRawResourceId, destinationFileName)
-
-            //openPdfWithExternalViewer(Uri.fromFile(copiedFile))
 
             //downloadFile(Uri.fromFile(copiedFile), "destination.pdf")
 
@@ -51,105 +60,149 @@ class ASPDocumentBuilder(){
             val contentStream = PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true)
             contentStream.beginText()
 
-            printMap[1]?.let { it(contentStream, "7") }
-            printMap[2]?.let { it(contentStream, "8") }
-            printMap[3]?.let { it(contentStream, "2") }
-            printMap[4]?.let { it(contentStream, "4") }
-            printMap[5]?.let { it(contentStream, "8") }
-            printMap[6]?.let { it(contentStream, "5") }
-            printMap[7]?.let { it(contentStream, "John") }
-            printMap[8]?.let { it(contentStream, "Doe") }
-            printMap[9]?.let { it(contentStream, "2") }
-            printMap[10]?.let { it(contentStream, "4") }
-            printMap[11]?.let { it(contentStream, "8") }
-            printMap[12]?.let { it(contentStream, "5") }
-            printMap[13]?.let { it(contentStream, "9") }
-            printMap[14]?.let { it(contentStream, "Berlin") }
-            printMap[15]?.let { it(contentStream, "Die Straße 23") }
-            printMap[16]?.let { it(contentStream, "+123456789 675") }
-            printMap[17]?.let { it(contentStream, "2123456") }
-            printMap[18]?.let { it(contentStream, "2") }
-            printMap[19]?.let { it(contentStream, "4") }
-            printMap[20]?.let { it(contentStream, "8") }
-            printMap[21]?.let { it(contentStream, "5") }
-            printMap[22]?.let { it(contentStream, "9") }
-            printMap[23]?.let { it(contentStream, "hier") }
-            printMap[24]?.let { it(contentStream, "dort") }
-            printMap[25]?.let { it(contentStream, "x") }
-            printMap[27]?.let { it(contentStream, "x") }
-            printMap[29]?.let { it(contentStream, "x") }
-            printMap[31]?.let { it(contentStream, "x") }
-            printMap[26]?.let { it(contentStream, "x") }
-            printMap[28]?.let { it(contentStream, "x") }
-            printMap[30]?.let { it(contentStream, "x") }
-            printMap[32]?.let { it(contentStream, "x") }
-            printMap[33]?.let { it(contentStream, "9") }
-            printMap[34]?.let { it(contentStream, "8") }
-            printMap[35]?.let { it(contentStream, "7") }
-            printMap[36]?.let { it(contentStream, "6") }
-            printMap[37]?.let { it(contentStream, "5") }
-            printMap[39]?.let { it(contentStream, "4") }
-            printMap[40]?.let { it(contentStream, "3") }
-            printMap[41]?.let { it(contentStream, "2") }
-            printMap[42]?.let { it(contentStream, "8") }
-            printMap[43]?.let { it(contentStream, "0") }
-            printMap[44]?.let { it(contentStream, "1") }
-            printMap[45]?.let { it(contentStream, "4") }
-            printMap[46]?.let { it(contentStream, "1") }
-            printMap[47]?.let { it(contentStream, "4") }
-            printMap[48]?.let { it(contentStream, "x") }
-            printMap[49]?.let { it(contentStream, "x") }
-            printMap[50]?.let { it(contentStream, "x") }
-            printMap[51]?.let { it(contentStream, "x") }
-            printMap[52]?.let { it(contentStream, "2") }
-            printMap[53]?.let { it(contentStream, "8") }
-            printMap[54]?.let { it(contentStream, "0") }
-            printMap[55]?.let { it(contentStream, "1") }
-            printMap[56]?.let { it(contentStream, "4") }
-            printMap[57]?.let { it(contentStream, "1") }
-            printMap[58]?.let { it(contentStream, "4") }
+            try {
+                for(i in 1 .. 6){
+                    printMap[i]?.let { it(contentStream, asp.profile.customerNumber[(-1+i)].toString()) }
+                }
+            } catch (ignored: Exception) {}
 
-            printMap[60]?.let { it(contentStream, "2") }
+            printMap[7]?.let { it(contentStream, asp.profile.name) }
+            printMap[8]?.let { it(contentStream, asp.profile.surname) }
+
+            try {
+                for(i in 9 .. 13){
+                    printMap[i]?.let { it(contentStream, asp.profile.zipCode[(-9+i)].toString()) }
+                }
+            } catch (ignored: Exception) {}
+
+            printMap[14]?.let { it(contentStream, asp.profile.city) }
+            printMap[15]?.let { it(contentStream, asp.profile.streetNumber) }
+            printMap[16]?.let { it(contentStream, asp.profile.phone) }
+
+            //printMap[17]?.let { it(contentStream, "") }
+
+            try {
+                for(i in 18 .. 22){
+                    printMap[18]?.let { it(contentStream, asp.localZipCode[(-18+i)].toString()) }
+                }
+            } catch (ignored: Exception) {}
+
+            printMap[23]?.let { it(contentStream, asp.localCity) }
+            printMap[24]?.let { it(contentStream, asp.hegering) }
+
+            when(asp.region) {
+                "LRO" -> printMap[25]?.let { it(contentStream, "x") }
+                "VR" -> printMap[26]?.let { it(contentStream, "x") }
+                "LUP" -> printMap[27]?.let { it(contentStream, "x") }
+                "VG" -> printMap[28]?.let { it(contentStream, "x") }
+                "MSE" -> printMap[29]?.let { it(contentStream, "x") }
+                "HRO" -> printMap[30]?.let { it(contentStream, "x") }
+                "NWM" -> printMap[31]?.let { it(contentStream, "x") }
+                "SN" -> printMap[32]?.let { it(contentStream, "x") }
+            }
+
+            //TODO: Fall "kein Standort geliefert" Ausgabe handlen
+
+            while(asp.latitude.length < 9){
+                asp.latitude = asp.latitude + "0"
+            }
+            while(asp.longitude.length < 9){
+                asp.longitude = asp.longitude + "0"
+            }
+
+            //38 ist nicht in der Map -> Fehler im annotierten Dokument
+            //+2 um den Dezimalpunkt und erste Zahl im String zu skippen (in Vorgabe)
+            for(i in (33..40).filter {it != 38}){
+                if (i == 33) printMap[i]?.let { it(contentStream, asp.latitude[1].toString()) }
+                else if (i > 38) printMap[i]?.let { it(contentStream, asp.latitude[(-32+i)].toString()) }
+                else printMap[i]?.let { it(contentStream, asp.latitude[(-33+i+2)].toString()) }
+            }
+            for(i in 41..47){
+                if (i == 41) printMap[i]?.let { it(contentStream, asp.latitude[1].toString()) }
+                else printMap[i]?.let { it(contentStream, asp.longitude[(-41+i+2)].toString()) }
+            }
+
+            when(asp.locationRegion) {
+                "Kerngebiet" -> printMap[48]?.let { it(contentStream, "x") }
+                "Sperrzone II (gefährdetes G.)" -> printMap[49]?.let { it(contentStream, "x") }
+                "Sperrzone I Pufferzone" -> printMap[50]?.let { it(contentStream, "x") }
+                "kein Risikogebiet" -> printMap[51]?.let { it(contentStream, "x") }
+            }
+
+            try {
+                for (i in 52..58) {
+                    printMap[i]?.let { it(contentStream, asp.wildlifeOrigin[(-52 + i)].toString()) }
+                }
+            } catch (ignored: Exception) {}
+
+            /*printMap[60]?.let { it(contentStream, "2") }
             printMap[61]?.let { it(contentStream, "8") }
             printMap[62]?.let { it(contentStream, "0") }
             printMap[63]?.let { it(contentStream, "1") }
             printMap[64]?.let { it(contentStream, "4") }
-            printMap[65]?.let { it(contentStream, "9") }
-            printMap[66]?.let { it(contentStream, "x") }
-            printMap[67]?.let { it(contentStream, "x") }
-            printMap[68]?.let { it(contentStream, "x") }
-            printMap[69]?.let { it(contentStream, "x") }
-            printMap[70]?.let { it(contentStream, "x") }
-            printMap[71]?.let { it(contentStream, "x") }
-            printMap[72]?.let { it(contentStream, "x") }
-            printMap[73]?.let { it(contentStream, "x") }
-            printMap[74]?.let { it(contentStream, "x") }
-            printMap[75]?.let { it(contentStream, "x") }
-            printMap[76]?.let { it(contentStream, "x") }
-            printMap[77]?.let { it(contentStream, "x") }
-            printMap[78]?.let { it(contentStream, "x") }
-            printMap[79]?.let { it(contentStream, "x") }
-            printMap[80]?.let { it(contentStream, "x") }
-            printMap[81]?.let { it(contentStream, "x") }
-            printMap[82]?.let { it(contentStream, "x") }
-            printMap[83]?.let { it(contentStream, "x") }
-            printMap[84]?.let { it(contentStream, "x") }
-            printMap[85]?.let { it(contentStream, "x") }
-            printMap[86]?.let { it(contentStream, "x") }
-            printMap[87]?.let { it(contentStream, "x") }
-            printMap[88]?.let { it(contentStream, "keine weiteren Hinweise") }
+            printMap[65]?.let { it(contentStream, "9") }*/
+
+            when(asp.trap){
+                "ja" -> printMap[66]?.let { it(contentStream, "x") }
+                "nein" -> printMap[67]?.let { it(contentStream, "x") }
+            }
+            when(asp.sex){
+                "männlich" -> printMap[68]?.let { it(contentStream, "x") }
+                "weiblich" -> printMap[69]?.let { it(contentStream, "x") }
+            }
+            when(asp.age){
+                "0 - Frischling" -> printMap[70]?.let { it(contentStream, "x") }
+                "1 - Überläufer" -> printMap[71]?.let { it(contentStream, "x") }
+                "2 - Adult" -> printMap[72]?.let { it(contentStream, "x") }
+            }
+            when(asp.material){
+                "Tierkörper" -> printMap[73]?.let { it(contentStream, "x") }
+                "Bluttupfer" -> printMap[74]?.let { it(contentStream, "x") }
+                "Blut" -> printMap[75]?.let { it(contentStream, "x") }
+                "Tierkörperteile" -> printMap[76]?.let { it(contentStream, "x") }
+                "Organe" -> printMap[77]?.let { it(contentStream, "x") }
+            }
+            when(asp.decomposition){
+                "frisch" -> printMap[78]?.let { it(contentStream, "x") }
+                "leicht zersetzt" -> printMap[79]?.let { it(contentStream, "x") }
+                "stark zersetzt" -> printMap[80]?.let { it(contentStream, "x") }
+                "Skelett mit Gewebe" -> printMap[81]?.let { it(contentStream, "x") }
+                "Skelett ohne Gewebe" -> printMap[82]?.let { it(contentStream, "x") }
+            }
+            when(asp.causeOfDeath){
+                "gesund erlegt" -> printMap[83]?.let { it(contentStream, "x") }
+                "krank erlegt" -> printMap[84]?.let { it(contentStream, "x") }
+                "verendet" -> printMap[85]?.let { it(contentStream, "x") }
+                "Unfallwild" -> printMap[86]?.let { it(contentStream, "x") }
+            }
+
+            // printMap[87]?.let { it(contentStream, "x") } was ist mit Anlagen?
+            printMap[88]?.let { it(contentStream, asp.additionalInfo) }
+
 
             contentStream.endText()
+
+            if(asp.barcode != "null" && asp.barcode != ""){
+                val matrix = Matrix()
+                matrix.setRotate(90f)
+
+                val barcodeBitmap = BarcodeGenerator.createImage(asp.barcode, "Barcode")
+                val rotatedBitmap = Bitmap.createBitmap(barcodeBitmap, 0, 0, barcodeBitmap.width, barcodeBitmap.height, matrix, true)
+
+                val pdBitmapImage = bitmapToPDImageXObject(doc, rotatedBitmap)
+                contentStream.drawImage(pdBitmapImage, 386F, 90F, pdBitmapImage.width.toFloat(), pdBitmapImage.height.toFloat())
+            }
+
             contentStream.close()
             doc.save(File(appContext.filesDir, destinationFileName))
             doc.close()
 
-            val downloadedFile = copyFileToDownloads(copiedFile, fileName)
+            /*val downloadedFile = copyFileToDownloads(copiedFile, fileName)
             if (downloadedFile != null) {
                 // File copied to Downloads directory successfully
             } else {
                 // Error occurred while copying the file
-            }
+            }*/
         }
 
         private fun copyFile(rawResourceId: Int, destinationFileName: String): File? {
@@ -212,6 +265,13 @@ class ASPDocumentBuilder(){
                 e.printStackTrace()
                 return null
             }
+        }
+
+        private fun bitmapToPDImageXObject(document: PDDocument, bitmap: Bitmap): PDImageXObject {
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            val inputStream = ByteArrayInputStream(outputStream.toByteArray())
+            return PDImageXObject.createFromByteArray(document, inputStream.readBytes(), "image")
         }
 
     }
