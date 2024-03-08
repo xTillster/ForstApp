@@ -83,7 +83,7 @@ class ASPDocumentBuilder(){
 
             try {
                 for(i in 18 .. 22){
-                    printMap[18]?.let { it(contentStream, asp.localZipCode[(-18+i)].toString()) }
+                    printMap[i]?.let { it(contentStream, asp.localZipCode[(-18+i)].toString()) }
                 }
             } catch (ignored: Exception) {}
 

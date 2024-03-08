@@ -55,7 +55,6 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
 
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
@@ -69,6 +68,11 @@ dependencies {
     implementation("androidx.compose.material3:material3-window-size-class:1.2.0")
     implementation("androidx.compose.material3:material3-adaptive:1.0.0-alpha06")
     implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.0.0-alpha03")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material-icons-core")
+    implementation("androidx.compose.material:material-icons-extended")
+
+
     implementation("com.google.android.gms:play-services-location:21.1.0")
     implementation("com.google.zxing:core:3.3.3")
     implementation("androidx.navigation:navigation-compose:2.7.7")
