@@ -1,4 +1,4 @@
-package com.example.forstapp.Util
+package com.example.forstapp.util
 
 import android.app.DownloadManager
 import android.content.Context
@@ -8,10 +8,9 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
-import com.example.forstapp.POJO.ASP
-import com.example.forstapp.POJO.ASPDocumentMap.Companion.printMap
+import com.example.forstapp.pojo.ASP
+import com.example.forstapp.pojo.ASPDocumentMap.Companion.printMap
 import com.example.forstapp.R
-import com.tom_roush.harmony.awt.geom.AffineTransform
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.pdmodel.PDPageContentStream

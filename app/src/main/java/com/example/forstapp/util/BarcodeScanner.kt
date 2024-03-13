@@ -1,4 +1,4 @@
-package com.example.forstapp.Util
+package com.example.forstapp.util
 
 import android.content.Context
 import com.google.mlkit.vision.barcode.common.Barcode

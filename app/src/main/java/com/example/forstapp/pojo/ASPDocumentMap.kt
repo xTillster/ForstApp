@@ -1,10 +1,8 @@
-package com.example.forstapp.POJO
+package com.example.forstapp.pojo
 
 import com.tom_roush.pdfbox.pdmodel.PDPageContentStream
 import com.tom_roush.pdfbox.pdmodel.font.PDType1Font
-import com.tom_roush.pdfbox.pdmodel.graphics.image.PDImageXObject
 import com.tom_roush.pdfbox.util.Matrix
-import java.io.ByteArrayInputStream
 
 class ASPDocumentMap {
     companion object {

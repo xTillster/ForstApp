@@ -1,4 +1,4 @@
-package com.example.forstapp.Components
+package com.example.forstapp.components
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -9,22 +9,13 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Color.parseColor
 import android.location.Location
-import android.net.Uri
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
@@ -36,9 +27,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MyLocation
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
@@ -48,15 +37,11 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -72,7 +57,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -80,14 +64,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.forstapp.Navigation
-import com.example.forstapp.POJO.ASP
-import com.example.forstapp.POJO.Signature
+import com.example.forstapp.pojo.ASP
+import com.example.forstapp.pojo.Signature
 import com.example.forstapp.Screen
-import com.example.forstapp.Util.ASPDocumentBuilder
-import com.example.forstapp.Util.BarcodeGenerator
-import com.example.forstapp.Util.BarcodeScanner
-import com.example.forstapp.Util.Tools.Companion.convertLongToTime
+import com.example.forstapp.util.ASPDocumentBuilder
+import com.example.forstapp.util.BarcodeGenerator
+import com.example.forstapp.util.BarcodeScanner
+import com.example.forstapp.util.HandlerJSON
+import com.example.forstapp.util.Tools.Companion.convertLongToTime
 import com.google.android.gms.location.CurrentLocationRequest
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Granularity
@@ -616,6 +600,12 @@ fun InputScreen(navController: NavController){
             }
             Button(onClick = { openPDF(context) }) {
                 Text("Open PDF")
+            }
+            val handlerJSON = HandlerJSON(context)
+            Button(onClick = { handlerJSON.handleResponseAndSaveData(
+                    "{\"surveyID\":0,\"surveyName\":\"ASP/ KSP Meldung\",\"regions\":[\"VG\", \"VR\"],\"content\":[{\"surveyCardID\": 0,\"surveyTitle\":\"Angaben zum Standort\",\"content\":[{\"surveyComponentID\":0,\"required\":false,\"targetID\":1,\"pageNumber\":1,\"saveForNextAs\": \"None\",\"usePreset\":\"None\",\"matrixPosition\":[0,-1,1,0,0,0],\"label\":\"not requiered\",\"regexPattern\":\"/^/d{5}\$/\"}]}]}"
+            ) }) {
+                Text("Text Kontlinx")
             }
 
             val tested = remember { mutableStateOf("") }

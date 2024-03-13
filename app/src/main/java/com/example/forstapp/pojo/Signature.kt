@@ -1,4 +1,4 @@
-package com.example.forstapp.POJO
+package com.example.forstapp.pojo
 
 import android.graphics.Bitmap
 

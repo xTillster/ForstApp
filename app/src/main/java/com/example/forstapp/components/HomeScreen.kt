@@ -1,6 +1,6 @@
-package com.example.forstapp.Components
+package com.example.forstapp.components
 
-import android.content.Intent
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,17 +18,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.forstapp.POJO.ASP
+import com.example.forstapp.pojo.ASP
 import com.example.forstapp.Screen
+import com.example.forstapp.pojo.Survey
+import com.example.forstapp.util.HandlerJSON
 
 @Composable
 fun HomeScreen(navController: NavController){
     val context = LocalContext.current
     val user = remember { mutableStateOf("") }
+    val sharedPreferences = context.getSharedPreferences("fetchedSurveys", Context.MODE_PRIVATE)
+    val mapEntries = sharedPreferences.all
 
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
+
         Column {
             Text(text = "Hallo")
             Text(text = user.value)
@@ -57,7 +62,30 @@ fun HomeScreen(navController: NavController){
                         .padding(10.dp)) {
                     Text(text = "Abschußmeldung")
                 }
+
+
+                mapEntries.entries.forEach { entry ->
+                    val key = entry.key
+                    //val value = entry.value as Survey
+                    val handlerJSON = HandlerJSON(context)
+                    val value = handlerJSON.getData(key)
+
+                    OutlinedCard(
+                        modifier = Modifier
+                            .weight(0.5f)
+                            .padding(5.dp)
+                            .clickable {
+                                navController.navigate(Screen.SurveyScreen.route + "/" + value!!.surveyID)
+                            }) {
+                        Text(text = value!!.surveyName)
+                    }
+                }
+
+
             }
         }
+    }
+
+    fun initialize(){
     }
 }

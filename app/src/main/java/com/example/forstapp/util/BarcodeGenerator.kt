@@ -1,4 +1,4 @@
-package com.example.forstapp.Util
+package com.example.forstapp.util
 
 import android.graphics.Bitmap
 import com.google.zxing.BarcodeFormat

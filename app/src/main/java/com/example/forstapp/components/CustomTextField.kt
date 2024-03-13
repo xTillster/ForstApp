@@ -1,4 +1,4 @@
-package com.example.forstapp.Components
+package com.example.forstapp.components
 
 import android.graphics.Color.parseColor
 import androidx.compose.foundation.layout.padding

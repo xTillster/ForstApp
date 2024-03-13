@@ -1,4 +1,4 @@
-package com.example.forstapp.Util
+package com.example.forstapp.util
 
 import android.icu.text.SimpleDateFormat
 import java.util.Date
