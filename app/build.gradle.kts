@@ -1,7 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    kotlin("plugin.serialization") version "1.9.23"
+    //kotlin("plugin.serialization") version "1.9.23"
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -23,8 +24,9 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -73,7 +75,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-core")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+    implementation("androidx.datastore:datastore:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
 
     implementation("com.google.android.gms:play-services-location:21.1.0")

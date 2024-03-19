@@ -1,12 +1,11 @@
 package com.example.forstapp.util
 
 import android.content.Context
-import com.example.forstapp.pojo.Survey
-import kotlinx.serialization.decodeFromString
+import com.example.forstapp.data.pojo.Survey
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class HandlerJSON(private val context: Context) {
+class JSONHandler(private val context: Context) {
 
     private val sharedPreferences = context.getSharedPreferences("fetchedSurveys", Context.MODE_PRIVATE)
     private val json = Json { ignoreUnknownKeys = true } // ignore unknown keys during deserialization

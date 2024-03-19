@@ -1,4 +1,4 @@
-package com.example.forstapp.components
+package com.example.forstapp.components.screen
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -64,13 +64,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.forstapp.pojo.ASP
-import com.example.forstapp.pojo.Signature
+import com.example.forstapp.data.pojo.ASP
+import com.example.forstapp.data.pojo.Signature
 import com.example.forstapp.Screen
+import com.example.forstapp.components.survey.cardComponents.CustomTextField
 import com.example.forstapp.util.ASPDocumentBuilder
 import com.example.forstapp.util.BarcodeGenerator
 import com.example.forstapp.util.BarcodeScanner
-import com.example.forstapp.util.HandlerJSON
+import com.example.forstapp.util.JSONHandler
 import com.example.forstapp.util.Tools.Companion.convertLongToTime
 import com.google.android.gms.location.CurrentLocationRequest
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -85,6 +86,8 @@ private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 @Composable
 fun InputScreen(navController: NavController){
+    val startTime = System.currentTimeMillis()
+    println("loading started: " + (System.currentTimeMillis() - startTime))
     val activity = (LocalContext.current as Activity)
     activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     val context = LocalContext.current
@@ -134,6 +137,7 @@ fun InputScreen(navController: NavController){
     fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
     val barcodeResults = barcodeScanner.barCodeResults.collectAsStateWithLifecycle()
+    println("erstes: " + (System.currentTimeMillis() - startTime))
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -146,6 +150,8 @@ fun InputScreen(navController: NavController){
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            println("intermediate 0: " + (System.currentTimeMillis() - startTime))
+
             ScanBarcode(barcodeScanner::startScan, barcodeResults.value)
             /*Button(onClick = {
                 ASPDocumentBuilder.setup(context)
@@ -153,6 +159,8 @@ fun InputScreen(navController: NavController){
             }) {
                 Text(text = "PDF")
             }*/
+            println("intermediate 1: " + (System.currentTimeMillis() - startTime))
+
             ElevatedCard(
                 modifier = Modifier
                     .fillMaxSize()
@@ -189,6 +197,7 @@ fun InputScreen(navController: NavController){
                         imeAction = ImeAction.Next
                     )
                 )
+                println("intermediate 3: " + (System.currentTimeMillis() - startTime))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -240,6 +249,7 @@ fun InputScreen(navController: NavController){
                     )
                 )
             }
+            println("intermediate 4: " + (System.currentTimeMillis() - startTime))
             ElevatedCard(
                 modifier = Modifier
                     .fillMaxSize()
@@ -306,6 +316,8 @@ fun InputScreen(navController: NavController){
                     }
                 }
             }
+            println("zweites: " + (System.currentTimeMillis() - startTime))
+
             val active = remember { mutableStateOf(true) }
             Button(
                 modifier = Modifier
@@ -543,6 +555,7 @@ fun InputScreen(navController: NavController){
                         onClick = { helper("Unfallwild") })
                 }
             }
+            println("drittes: " + (System.currentTimeMillis() - startTime))
             fun saveState() {
                 ASP.currentASP.profile.customerNumber = customerNumber.value
                 ASP.currentASP.profile.name = name.value
@@ -601,12 +614,14 @@ fun InputScreen(navController: NavController){
             Button(onClick = { openPDF(context) }) {
                 Text("Open PDF")
             }
-            val handlerJSON = HandlerJSON(context)
+            println("viertes: " + (System.currentTimeMillis() - startTime))
+            val handlerJSON = JSONHandler(context)
             Button(onClick = { handlerJSON.handleResponseAndSaveData(
-                    "{\"surveyID\":0,\"surveyName\":\"ASP/ KSP Meldung\",\"regions\":[\"VG\", \"VR\"],\"content\":[{\"surveyCardID\": 0,\"surveyTitle\":\"Angaben zum Standort\",\"content\":[{\"surveyComponentID\":0,\"required\":false,\"targetID\":1,\"pageNumber\":1,\"saveForNextAs\": \"None\",\"usePreset\":\"None\",\"matrixPosition\":[0,-1,1,0,0,0],\"label\":\"not requiered\",\"regexPattern\":\"/^/d{5}\$/\"}]}]}"
+                    "{\"surveyID\":0,\"surveyName\":\"ASP/ KSP Meldung\",\"regions\":[\"VG\", \"VR\"],\"content\":[{\"surveyCardID\": 0,\"surveyCardTitle\":\"Angaben zum Standort\",\"content\":[{\"surveyComponentID\":0,\"required\":false,\"targetID\":1,\"pageNumber\":1,\"saveForNextAs\": \"None\",\"usePreset\":\"None\",\"matrixPosition\":[0,-1,1,0,0,0],\"content\":[\"not required\"],\"regexPattern\":\"/^/d{5}\$/\"}]}]}"
             ) }) {
                 Text("Text Kontlinx")
             }
+            println("fünftes: " + (System.currentTimeMillis() - startTime))
 
             val tested = remember { mutableStateOf("") }
             ElevatedCard(
@@ -635,6 +650,7 @@ fun InputScreen(navController: NavController){
             for(i in 1..10){
                 Text(text = i.toString())
             }
+            println("done: " + (System.currentTimeMillis() - startTime))
         }
     }
 }

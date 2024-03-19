@@ -1,4 +1,4 @@
-package com.example.forstapp.pojo
+package com.example.forstapp.data.pojo
 
 import com.tom_roush.pdfbox.pdmodel.PDPageContentStream
 import com.tom_roush.pdfbox.pdmodel.font.PDType1Font

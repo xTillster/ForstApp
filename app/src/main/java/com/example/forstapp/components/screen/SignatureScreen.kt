@@ -1,4 +1,4 @@
-package com.example.forstapp.components
+package com.example.forstapp.components.screen
 
 import android.app.Activity
 import android.content.pm.ActivityInfo
@@ -33,7 +33,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.forstapp.pojo.Signature
+import com.example.forstapp.data.pojo.Signature
 
 @Composable
 fun SignatureScreen(navController: NavController) {

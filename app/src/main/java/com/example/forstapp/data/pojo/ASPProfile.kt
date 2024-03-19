@@ -1,4 +1,4 @@
-package com.example.forstapp.pojo
+package com.example.forstapp.data.pojo
 
 data class ASPProfile(
     var customerNumber: String,

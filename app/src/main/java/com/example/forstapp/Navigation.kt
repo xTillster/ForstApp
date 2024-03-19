@@ -6,10 +6,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.forstapp.components.HomeScreen
-import com.example.forstapp.components.InputScreen
-import com.example.forstapp.components.SignatureScreen
-import com.example.forstapp.components.survey.SurveyScreen
+import com.example.forstapp.components.screen.HomeScreen
+import com.example.forstapp.components.screen.InputScreen
+import com.example.forstapp.components.screen.SignatureScreen
+import com.example.forstapp.components.screen.SurveyScreen
 
 @Composable
 fun Navigation() {
